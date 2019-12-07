@@ -23,7 +23,7 @@ class PushTokenController(
 }
 
 data class PushTokenRequest(
-    val userId: String,
+    val userId: Long,
     val pushToken: String,
     val platform: PushTokenPlatform
 )
