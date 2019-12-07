@@ -22,10 +22,8 @@ steps:
     publishJUnitResults: true
     testResultsFiles: '**/TEST-*.xml'
     tasks: 'build'
-- task: SSH@0
+- task: CmdLine@2
   inputs:
-    sshEndpoint: '167.71.48.207'
-    runOptions: 'commands'
-    commands: |
+    script: |
       scp build/libs/mobile-api-1.0.jar root@167.71.48.207:/var/tech-madness/mobile-api/mobile-api-1.0.jar
       ssh root@167.71.48.207 'systemctl restart mobile-api'
