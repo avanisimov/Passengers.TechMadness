@@ -22,14 +22,6 @@ abstract class BaseFragment : Fragment() {
         }
     }
 
-
-    private val viewModels: MutableSet<BaseViewModel> = HashSet()
-
-    protected fun addViewModels(vararg viewModels: BaseViewModel) {
-        this.viewModels.addAll(viewModels)
-    }
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
 
         fragmentScopeKey = if (savedInstanceState != null) {
@@ -56,7 +48,7 @@ abstract class BaseFragment : Fragment() {
         super.onPause()
     }
 
-    protected fun onCreateModule(): Module {
+    open fun onCreateModule(): Module {
         return Module()
     }
 
@@ -64,9 +56,6 @@ abstract class BaseFragment : Fragment() {
         super.onDestroy()
         if (isRemoving) {
             compositeDisposable.clear()
-            for (viewModel in viewModels) {
-                viewModel.onCleared()
-            }
             Toothpick.closeScope(fragmentScopeKey)
         }
     }
