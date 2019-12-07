@@ -24,7 +24,8 @@ steps:
     tasks: 'build'
 - task: SSH@0
   inputs:
+    sshEndpoint: '167.71.48.207'
     runOptions: 'commands'
     commands: |
       scp build/libs/mobile-api-1.0.jar root@167.71.48.207:/var/tech-madness/mobile-api/mobile-api-1.0.jar
-      ssh root@1167.71.48.207 'systemctl restart mobile-api'
+      ssh root@167.71.48.207 'systemctl restart mobile-api'
