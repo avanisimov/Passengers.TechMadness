@@ -29,10 +29,14 @@ class SampleApp extends StatelessWidget {
           child: AudienceListPage(repository),
         ),
         routes: <String, WidgetBuilder>{
-          '/article-details': (BuildContext context) =>
-              ChangeNotifierProvider.value(
+          '/article-details': (BuildContext context) => MultiProvider(
                 child: AudienceDetailsPage(repository),
-                value: RangeConfigNotifier(repository),
+                providers: [
+                  ChangeNotifierProvider(
+                      create: (_) => IncomeModel(repository)),
+                  ChangeNotifierProvider(
+                      create: (_) => RegionsModel(repository))
+                ],
               )
         });
   }
@@ -85,12 +89,11 @@ class _AudienceListPageState extends State<AudienceListPage> {
         body: ListView.builder(
             itemCount: model.audience.length,
             itemBuilder: (BuildContext context, int position) {
-              return getRow(position, model.audience);
+              return getRow(model.audience[position]);
             }));
   }
 
-  Widget getRow(int i, List<AudienceShort> audience) {
-    final AudienceShort item = audience[i];
+  Widget getRow(AudienceShort item) {
     return Card(
       child: InkWell(
         splashColor: Colors.blue.withAlpha(30),
@@ -130,17 +133,13 @@ class AudienceDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Creation of app")),
+      appBar: AppBar(title: Text("Tech.Madness")),
       body: Padding(
         padding: EdgeInsets.all(24),
         child: Column(
           children: <Widget>[
-            ChangeNotifierProvider.value(
-              child: Consumer<RangeConfigNotifier>(
-                builder: (context, value, _) => IncomeRangeStateCard(value),
-              ),
-              value: RangeConfigNotifier(repository),
-            )
+            IncomeRangeStateCard(),
+            RegionCard(),
           ],
         ),
       ),
@@ -148,45 +147,63 @@ class AudienceDetailsPage extends StatelessWidget {
   }
 }
 
-class IncomeRangeStateCard extends StatelessWidget {
-  final RangeConfigNotifier rangeState;
+class ParameterCard extends StatelessWidget {
+  final String title;
+  final List<Widget> children;
 
-  IncomeRangeStateCard(this.rangeState);
+  ParameterCard({String title, List<Widget> children})
+      : this.title = title,
+        this.children = children;
 
   @override
   Widget build(BuildContext context) {
-    final config = Provider.of<RangeConfigNotifier>(context);
-    print("rangeState is $config");
     return Card(
       elevation: 8,
       child: Container(
         padding: EdgeInsets.all(16),
         child: Column(
           children: <Widget>[
-            Text(
-              "Income from company",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-            ),
             Container(
-              child: RangeSlider(
-                min: config.minValue,
-                max: config.maxValue,
-                values: config.range,
-                onChanged: (RangeValues newRange) {
-                  config.range = newRange;
-                },
-                activeColor: Colors.red,
+              alignment: Alignment(-1, 0),
+              child: Text(
+                title,
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
               ),
             ),
-            createPresetsBar(context, config)
+            ...children,
           ],
         ),
       ),
       margin: EdgeInsets.all(16),
     );
   }
+}
 
-  Row createPresetsBar(BuildContext context, RangeConfigNotifier rangeConfig) {
+class IncomeRangeStateCard extends StatelessWidget {
+  IncomeRangeStateCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final config = Provider.of<IncomeModel>(context);
+    print("Income card config=${config}");
+    return ParameterCard(
+      title: "Income from company",
+      children: <Widget>[
+        RangeSlider(
+          min: config.minValue,
+          max: config.maxValue,
+          values: config.range,
+          onChanged: (RangeValues newRange) {
+            config.range = newRange;
+          },
+          activeColor: Colors.red,
+        ),
+        createPresetsBar(context, config)
+      ],
+    );
+  }
+
+  Row createPresetsBar(BuildContext context, IncomeModel rangeConfig) {
     double opacity = 0.1;
     List<Widget> presets = rangeConfig.rangePresets
         .map((preset) => GestureDetector(
@@ -207,6 +224,74 @@ class IncomeRangeStateCard extends StatelessWidget {
   }
 }
 
+class RegionCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    RegionsModel regionsModel = Provider.of<RegionsModel>(context);
+    return ParameterCard(
+      title: "Regions",
+      children: <Widget>[
+        Divider(thickness: 1),
+        SizedBox(
+          height: 400,
+          child: ListView.separated(
+            shrinkWrap: true,
+            itemCount: regionsModel.regions.length,
+            itemBuilder: (context, index) =>
+                getRow(regionsModel.getItem(index)),
+            separatorBuilder: (context, index) => Divider(thickness: 1),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget getRow(RegionItem item) {
+    return ChangeNotifierProvider(
+      child: Consumer<RegionItemWrapper>(
+          builder: (context, item, _) => Container(
+                  // padding: Insets.fromLTRB(0, 4, 0, 4),
+                  child: Row(
+                children: <Widget>[
+                  Checkbox(
+                    onChanged: (checked) {
+                      item.checked = checked;
+                    },
+                    value: item.isChecked,
+                  ),
+                  Text(item.title)
+                ],
+              ))),
+      create: (BuildContext context) => RegionItemWrapper(item),
+    );
+  }
+}
+
+class RegionItem {
+  final String title;
+  bool _checked = false;
+
+  RegionItem(this.title);
+
+  bool get isChecked => _checked;
+
+  set checked(bool checked) {
+    _checked = checked;
+  }
+}
+
+class RegionItemWrapper with ChangeNotifier {
+  final RegionItem _item;
+  RegionItemWrapper(this._item);
+  bool get isChecked => _item.isChecked;
+  set checked(bool checked) {
+    _item.checked = checked;
+    notifyListeners();
+  }
+
+  String get title => _item.title;
+}
+
 class RangeConfig {
   final int minValue;
   final int maxValue;
@@ -222,17 +307,17 @@ class RangePreset {
 
   RangePreset(this.title, this.startValue, this.endValue);
 
-  RangeValues get range => RangeValues(startValue.toDouble(), endValue.toDouble());
+  RangeValues get range =>
+      RangeValues(startValue.toDouble(), endValue.toDouble());
 }
 
-class RangeConfigNotifier with ChangeNotifier {
+class IncomeModel with ChangeNotifier {
   RangeConfig _config = RangeConfig(0, 1, []);
 
   int _startValue = 0;
   int _endValue = 1;
 
-  RangeConfigNotifier(Repository repository) {
-    // fetchData(repository);
+  IncomeModel(Repository repository) {
     fetchData(repository);
   }
 
@@ -288,19 +373,41 @@ class RangeConfigNotifier with ChangeNotifier {
   }
 }
 
+class RegionsModel with ChangeNotifier {
+  List<RegionItem> _regions = [];
+
+  List<RegionItem> get regions => _regions;
+
+  List<String> get selectedRegions =>
+      _regions.where((item) => item.isChecked).map((item) => item.title);
+
+  RegionsModel(Repository repository) {
+    fetchData(repository);
+  }
+
+  RegionItem getItem(int index) => _regions[index];
+
+  void fetchData(Repository repository) async {
+    _regions = await repository
+        .getRegions()
+        .then((list) => list.map((item) => RegionItem(item)).toList());
+    notifyListeners();
+  }
+}
+
 class Repository {
   static String baseUrl = "http://167.71.48.207:9999/api/web";
 
   Future<AudienceShortListResponse> getAudiences() async {
     String dataURL = "$baseUrl/audiences?skip=0&take=20";
     print("Start request for audience list url=$dataURL");
-    return Future.value(AudienceShortListResponse(
-        20, [AudienceShort("id", "title", "description")]));
+    // return Future.value(AudienceShortListResponse(
+    //     20, [AudienceShort("id", "title", "description")]));
 
-    // return http
-    //     .get("http://167.71.48.207:9999/api/web/audiences?skip=0&take=20")
-    //     .then((value) =>
-    //         AudienceShortListResponse.fromJson(json.decode(value.body)));
+    return http
+        .get("http://167.71.48.207:9999/api/web/audiences?skip=0&take=20")
+        .then((value) =>
+            AudienceShortListResponse.fromJson(json.decode(value.body)));
   }
 
   Future<RangeConfig> getLtvConfigAsync() async {
@@ -315,7 +422,7 @@ class Repository {
     ]));
   }
 
-  Future<List<String>> getCities() async {
+  Future<List<String>> getRegions() async {
     return Future.value([
       "Адыгея",
       "Алтай",
