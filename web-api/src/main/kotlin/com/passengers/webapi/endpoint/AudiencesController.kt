@@ -8,6 +8,7 @@ import com.passengers.webapi.service.AudiencesService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.util.UUID
+import javax.websocket.server.PathParam
 
 @RestController
 class AudiencesController(
@@ -33,6 +34,16 @@ class AudiencesController(
     ): ResponseEntity<AudienceFull> {
         return ResponseEntity.ok(
             audiencesService.createAudience(audienceCreateForm)
+        )
+    }
+
+    @GetMapping("audiences/{id}")
+    fun getAudiences(
+        @PathVariable("id")
+        id: String
+    ): ResponseEntity<AudienceFull> {
+        return ResponseEntity.ok(
+            audiencesService.getAudience(id)
         )
     }
 }

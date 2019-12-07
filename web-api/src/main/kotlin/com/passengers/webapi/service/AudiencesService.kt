@@ -5,6 +5,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.passengers.webapi.data.Audience
 import com.passengers.webapi.data.AudiencesRepository
+import javassist.NotFoundException
 import org.springframework.stereotype.Service
 import java.lang.StringBuilder
 import java.util.*
@@ -88,6 +89,26 @@ class AudiencesService(
             items.size,
             items
         )
+    }
+
+    fun getAudience(id: String): AudienceFull {
+        val findById = audiencesRepository.findById(UUID.fromString(id))
+        if (findById.isPresent) {
+            val audience = findById.get()
+            return AudienceFull(
+                audience.id,
+                audience.title,
+                jacksonObjectMapper().readValue<List<String>>(audience.regions ?: "[]"),
+                audience.registeredMonthsAgo,
+                audience.lastPaymentMonthsAgo,
+                audience.transactionsCountMin,
+                audience.transactionsCountMax,
+                audience.productsCount,
+                audience.totalAmountMin,
+                audience.totalAmountMax
+            )
+        }
+        throw NotFoundException("Can't find Audience for id=$id")
     }
 
 }
