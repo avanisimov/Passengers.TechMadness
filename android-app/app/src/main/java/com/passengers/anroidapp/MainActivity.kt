@@ -1,10 +1,8 @@
 package com.passengers.anroidapp
 
 import android.os.Bundle
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProviders
-import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.passengers.anroidapp.core.BaseActivity
 import com.passengers.anroidapp.feature.chat.ChatViewModel
@@ -24,12 +22,12 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var newsViewModel = ViewModelProviders.of(this)[NewsViewModel::class.java]
+       /* var newsViewModel = ViewModelProviders.of(this)[NewsViewModel::class.java]
         var notificationsViewModel = ViewModelProviders.of(this)[NotificationsViewModel::class.java]
         var specialsViewModel = ViewModelProviders.of(this)[SpecialsViewModel::class.java]
         var chatViewModel = ViewModelProviders.of(this)[ChatViewModel::class.java]
         var settingsViewModel = ViewModelProviders.of(this)[SettingsViewModel::class.java]
-
+*/
         onFindViews()
         onBindViews()
 
@@ -45,19 +43,19 @@ class MainActivity : BaseActivity() {
         setSupportActionBar(toolbar)
         bottomNavigationView.setOnNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.navigation_news -> router?.navigateTo(NewsScreen()).apply {
+                R.id.navigation_news -> router?.replaceScreen(NewsScreen()).apply {
                     supportActionBar?.setTitle(R.string.news)
                 }
-                R.id.navigation_notifications -> router?.navigateTo(NotificationsScreen()).apply {
+                R.id.navigation_notifications -> router?.replaceScreen(NotificationsScreen()).apply {
                     supportActionBar?.setTitle(R.string.notifications)
                 }
-                R.id.navigation_specials -> router?.navigateTo(SpecialsScreen()).apply {
+                R.id.navigation_specials -> router?.replaceScreen(SpecialsScreen()).apply {
                     supportActionBar?.setTitle(R.string.specials)
                 }
-                R.id.navigation_chat -> router?.navigateTo(ChatScreen()).apply {
+                R.id.navigation_chat -> router?.replaceScreen(ChatScreen()).apply {
                     supportActionBar?.setTitle(R.string.chat)
                 }
-                R.id.navigation_settings -> router?.navigateTo(SettingsScreen()).apply {
+                R.id.navigation_settings -> router?.replaceScreen(SettingsScreen()).apply {
                     supportActionBar?.setTitle(R.string.settings)
                 }
             }
