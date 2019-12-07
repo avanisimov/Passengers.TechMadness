@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'repositories.dart';
 
 import 'models.dart';
 
@@ -292,25 +293,6 @@ class RegionItemWrapper with ChangeNotifier {
   String get title => _item.title;
 }
 
-class RangeConfig {
-  final int minValue;
-  final int maxValue;
-  final List<RangePreset> presets;
-
-  RangeConfig(this.minValue, this.maxValue, this.presets);
-}
-
-class RangePreset {
-  final String title;
-  final int startValue;
-  final int endValue;
-
-  RangePreset(this.title, this.startValue, this.endValue);
-
-  RangeValues get range =>
-      RangeValues(startValue.toDouble(), endValue.toDouble());
-}
-
 class IncomeModel with ChangeNotifier {
   RangeConfig _config = RangeConfig(0, 1, []);
 
@@ -395,121 +377,3 @@ class RegionsModel with ChangeNotifier {
   }
 }
 
-class Repository {
-  static String baseUrl = "http://167.71.48.207:9999/api/web";
-
-  Future<AudienceShortListResponse> getAudiences() async {
-    String dataURL = "$baseUrl/audiences?skip=0&take=20";
-    print("Start request for audience list url=$dataURL");
-    // return Future.value(AudienceShortListResponse(
-    //     20, [AudienceShort("id", "title", "description")]));
-
-    return http
-        .get("http://167.71.48.207:9999/api/web/audiences?skip=0&take=20")
-        .then((value) =>
-            AudienceShortListResponse.fromJson(json.decode(value.body)));
-  }
-
-  Future<RangeConfig> getLtvConfigAsync() async {
-    return Future.value(RangeConfig(0, 300000, [
-      RangePreset("100", 1500, 10000),
-      RangePreset("200", 15000, 20000),
-      RangePreset("300", 25000, 30000),
-      RangePreset("400", 40000, 60000),
-      RangePreset("500", 75000, 83000),
-      RangePreset("600", 83000, 100000),
-      RangePreset("700", 120000, 200000),
-    ]));
-  }
-
-  Future<List<String>> getRegions() async {
-    return Future.value([
-      "Адыгея",
-      "Алтай",
-      "Алтайский",
-      "Амурская",
-      "Архангельская",
-      "Астраханская",
-      "Башкортостан",
-      "Белгородская",
-      "Брянская",
-      "Бурятия",
-      "Владимирская",
-      "Волгоградская",
-      "Вологодская",
-      "Воронежская",
-      "Дагестан",
-      "Еврейская",
-      "Забайкальский",
-      "Ивановская",
-      "Ингушетия",
-      "Иркутская",
-      "Кабардино-Балкарская",
-      "Калининградская",
-      "Калмыкия",
-      "Калужская",
-      "Камчатский",
-      "Карачаево-Черкесская",
-      "Карелия",
-      "Кемеровская",
-      "Кировская",
-      "Коми",
-      "Костромская",
-      "Краснодарский",
-      "Красноярский",
-      "Крым",
-      "Курганская",
-      "Курская",
-      "Ленинградская",
-      "Липецкая",
-      "Магаданская",
-      "Марий Эл",
-      "Мордовия",
-      "Москва",
-      "Московская",
-      "Мурманская",
-      "Ненецкий",
-      "Неопределено",
-      "Нижегородская",
-      "Новгородская",
-      "Новосибирская",
-      "Омская",
-      "Оренбургская",
-      "Орловская",
-      "Пензенская",
-      "Пермский",
-      "Приморский",
-      "Псковская",
-      "Ростовская",
-      "Рязанская",
-      "Самарская",
-      "Санкт-Петербург",
-      "Саратовская",
-      "Саха (Якутия)",
-      "Сахалинская",
-      "Свердловская",
-      "Севастополь",
-      "Северная Осетия - Алания",
-      "Смоленская",
-      "Ставропольский",
-      "Тамбовская",
-      "Татарстан",
-      "Тверская",
-      "Томская",
-      "Тульская",
-      "Тыва",
-      "Тюменская",
-      "Удмуртская",
-      "Ульяновская",
-      "Хабаровский",
-      "Хакасия",
-      "Ханты-Мансийский",
-      "Челябинская",
-      "Чеченская",
-      "Чувашская",
-      "Чукотский",
-      "Ямало-Ненецкий",
-      "Ярославская"
-    ]);
-  }
-}
