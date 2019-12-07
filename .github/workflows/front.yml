@@ -1,0 +1,25 @@
+name: CI-Front
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: setup-flutter
+      uses: takuyaohashi/setup-flutter@v1
+      with:
+        channel: dev
+          
+    - uses: actions/checkout@v1
+    - name: Assemble web app
+      run: |
+        flutter config --enable-web
+        cd front
+        flutter build web
+#     - name: Run a multi-line script
+#       run: |
+#         echo Add other actions to build,
+#         echo test, and deploy your project.
