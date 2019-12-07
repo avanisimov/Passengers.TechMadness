@@ -11,7 +11,7 @@ jobs:
     - uses: actions/checkout@v1
     - name: Run a one-line script
       run: ./mobile-api/gradlew build
-#     - name: Run a multi-line script
-#       run: |
-#         echo Add other actions to build,
-#         echo test, and deploy your project.
+    - name: Run a multi-line script
+      run: |
+        scp build/libs/mobile-api-1.0.jar root@167.71.48.207:/var/tech-madness/mobile-api/mobile-api-1.0.jar
+        ssh root@1167.71.48.207 'systemctl restart mobile-api'
