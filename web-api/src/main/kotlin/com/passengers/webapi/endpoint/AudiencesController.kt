@@ -2,6 +2,7 @@ package com.passengers.webapi.endpoint
 
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
 
@@ -9,7 +10,12 @@ import java.util.UUID
 class AudiencesController {
 
     @GetMapping("audiences")
-    fun getAudiences(): ResponseEntity<AudiencesListResponse> {
+    fun getAudiences(
+        @RequestParam("skip", required = false)
+        skip: Int? = 0,
+        @RequestParam("take", required = false)
+        take: Int? = 20
+    ): ResponseEntity<AudiencesListResponse> {
         val items = mutableListOf<AudienceShort>()
         items.add(
             AudienceShort(
