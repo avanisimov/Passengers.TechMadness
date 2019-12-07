@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+            android:id="@+id/navigation_news"
+            android:icon="@drawable/ic_24_news"
+            android:title="" />
+
+    <item
+            android:id="@+id/navigation_notifications"
+            android:icon="@drawable/ic_24_notifications"
+            android:title="" />
+
+    <item
+            android:id="@+id/navigation_specials"
+            android:icon="@drawable/ic_24_gift"
+            android:title="" />
+
+    <item
+            android:id="@+id/navigation_chat"
+            android:icon="@drawable/ic_24_chat"
+            android:title="" />
+
+    <item
+            android:id="@+id/navigation_settings"
+            android:icon="@drawable/ic_24_settings"
+            android:title="" />
+
+</menu>
