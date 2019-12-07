@@ -25,27 +25,26 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
 
-    private val viewModels: MutableSet<BaseViewModel> = HashSet()
-
-    protected fun addViewModels(vararg viewModels: BaseViewModel) {
-        this.viewModels.addAll(viewModels)
-    }
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
+
         router = RosbankApplication.INSTANCE.getRouter()
+
         activityScopeKey = if (savedInstanceState != null) {
             savedInstanceState.getString(RosbankApplication.SCOPE_KEY)
         } else {
             this.toString()
         }
+
         val scope = Toothpick.openScopes(
                 RosbankApplication.APP_SCOPE_KEY,
                 activityScopeKey
         )
+
         scope.installModules(onCreateModule())
+
         Toothpick.inject(this, scope)
     }
 
@@ -59,17 +58,13 @@ abstract class BaseActivity : AppCompatActivity() {
         RosbankApplication.INSTANCE.getNavigatorHolder()!!.removeNavigator()
     }
 
-    protected fun onCreateModule(): Module {
+    open fun onCreateModule(): Module {
         return Module()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (isFinishing) {
-            compositeDisposable.clear()
-            for (viewModel in viewModels) {
-                viewModel.onCleared()
-            }
             compositeDisposable.clear()
             Toothpick.closeScope(activityScopeKey)
         }

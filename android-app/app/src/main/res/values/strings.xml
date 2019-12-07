@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">TechMadness</string>
+    <string name="news">News</string>
+    <string name="notifications">Notifications</string>
+    <string name="specials">Specials</string>
+    <string name="chat">Chat</string>
+    <string name="settings">Settings</string>
 </resources>

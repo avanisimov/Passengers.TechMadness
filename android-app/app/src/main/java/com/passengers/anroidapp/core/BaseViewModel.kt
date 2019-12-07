@@ -1,12 +1,13 @@
 package com.passengers.anroidapp.core
 
+import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import ru.terrakok.cicerone.Router
 
-abstract class BaseViewModel {
+abstract class BaseViewModel : ViewModel(){
 
-    protected var router: Router?
+    protected var router: Router? = RosbankApplication.INSTANCE.getRouter()
     private val compositeDisposable = CompositeDisposable()
 
 
@@ -18,11 +19,8 @@ abstract class BaseViewModel {
 
     abstract fun init()
 
-    fun onCleared() {
+    public override fun onCleared() {
         compositeDisposable.clear()
     }
 
-    init {
-        router = RosbankApplication.INSTANCE.getRouter()
-    }
 }
