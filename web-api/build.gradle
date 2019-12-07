@@ -37,6 +37,7 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-data-jpa'
     compile 'org.postgresql:postgresql'
     compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.+"
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.6.0'
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }

@@ -1,5 +1,8 @@
 package com.passengers.webapi.endpoint
 
+import com.passengers.webapi.data.Campaign
+import com.passengers.webapi.service.CampaignCreateForm
+import com.passengers.webapi.service.CampaignsService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -8,13 +11,17 @@ import org.springframework.web.bind.annotation.RestController
 import java.util.*
 
 @RestController
-class CampaignsController {
+class CampaignsController(
+    val campaignsService: CampaignsService
+) {
 
     @PostMapping("campaigns")
     fun postCampaign(
-        @RequestBody campaignRequestBody: CampaignRequestBody
-    ): ResponseEntity<Any> {
-        return ResponseEntity.noContent().build()
+        @RequestBody campaignCreateForm: CampaignCreateForm
+    ): ResponseEntity<Campaign> {
+        return ResponseEntity.ok(
+            campaignsService.createCampaign(campaignCreateForm)
+        )
     }
 
     @GetMapping("campaigns")
@@ -27,10 +34,6 @@ class CampaignsController {
         )
     }
 }
-
-data class CampaignRequestBody(
-    val title: String
-)
 
 data class CampaignListResponse(
     val total: Int,
