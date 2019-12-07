@@ -5,6 +5,7 @@ apply plugin: 'kotlin-android'
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
+
     defaultConfig {
         applicationId "com.passengers.anroidapp"
         minSdkVersion 21
@@ -12,10 +13,20 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    signingConfigs {
+        debug {
+            storeFile file('debug.keystore')
+            storePassword 'android'
+            keyAlias = 'androiddebugkey'
+            keyPassword 'android'
         }
     }
 }
@@ -49,4 +60,10 @@ dependencies {
     compileOnly 'javax.inject:javax.inject:1'
     implementation 'com.github.stephanenicolas.toothpick:toothpick-runtime:3.1.0'
     annotationProcessor 'com.github.stephanenicolas.toothpick:toothpick-compiler:3.1.0'
+
+    // Navigation
+    implementation 'ru.terrakok.cicerone:cicerone:5.0.0'
+
+    // Datetime
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.1'
 }
