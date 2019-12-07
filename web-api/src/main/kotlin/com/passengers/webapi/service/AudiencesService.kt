@@ -5,14 +5,20 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.passengers.webapi.data.Audience
 import com.passengers.webapi.data.AudiencesRepository
+import com.passengers.webapi.data.Client
+import com.passengers.webapi.data.ClientsRepository
 import javassist.NotFoundException
+import org.springframework.data.jpa.domain.Specification
+import org.springframework.data.jpa.domain.Specifications
 import org.springframework.stereotype.Service
 import java.lang.StringBuilder
 import java.util.*
+import javax.persistence.criteria.Root
 
 @Service
 class AudiencesService(
-    val audiencesRepository: AudiencesRepository
+    val audiencesRepository: AudiencesRepository,
+    val clientsRepository: ClientsRepository
 ) {
 
     fun createAudience(audienceCreateForm: AudienceCreateForm): AudienceFull {
@@ -25,10 +31,10 @@ class AudiencesService(
                 registeredMonthsAgo = audienceCreateForm.registeredMonthsAgo,
                 lastPaymentMonthsAgo = audienceCreateForm.lastPaymentMonthsAgo,
                 transactionsCountMin = audienceCreateForm.transactionsCountMin,
-                transactionsCountMax = audienceCreateForm.transactionsCountMax,
                 productsCount = audienceCreateForm.productsCount,
                 totalAmountMin = audienceCreateForm.totalAmountMin,
-                totalAmountMax = audienceCreateForm.totalAmountMax
+                totalAmountMax = audienceCreateForm.totalAmountMax,
+                rfmSegments = objectMapper.writeValueAsString(audienceCreateForm.rfmSegments)
             )
         )
         return AudienceFull(
@@ -38,7 +44,6 @@ class AudiencesService(
             audience.registeredMonthsAgo,
             audience.lastPaymentMonthsAgo,
             audience.transactionsCountMin,
-            audience.transactionsCountMax,
             audience.productsCount,
             audience.totalAmountMin,
             audience.totalAmountMax
@@ -46,35 +51,6 @@ class AudiencesService(
     }
 
     fun getAudiences(skip: Int, take: Int): AudiencesListResponse {
-//        val items = mutableListOf<AudienceShort>()
-//        items.add(
-//            AudienceShort(
-//                UUID.randomUUID().toString(),
-//                "Малый бизнес",
-//                "Доходы: от 10.000 до 50.000, лалалалла тарататататататата олололол"
-//            )
-//        )
-//        items.add(
-//            AudienceShort(
-//                UUID.randomUUID().toString(),
-//                "Средний бизнес",
-//                "Доходы: от 50.000 до 50.001, лалалалла тарататататататата олололол"
-//            )
-//        )
-//        items.add(
-//            AudienceShort(
-//                UUID.randomUUID().toString(),
-//                "Сварщики",
-//                "лалалалла тарататататататата олололол"
-//            )
-//        )
-//        items.add(
-//            AudienceShort(
-//                UUID.randomUUID().toString(),
-//                "Мастера по ноготочкам",
-//                "лалалалла тарататататататата олололол"
-//            )
-//        )
         val items = audiencesRepository
             .findAll()
             .map { audience ->
@@ -102,15 +78,33 @@ class AudiencesService(
                 audience.registeredMonthsAgo,
                 audience.lastPaymentMonthsAgo,
                 audience.transactionsCountMin,
-                audience.transactionsCountMax,
                 audience.productsCount,
                 audience.totalAmountMin,
-                audience.totalAmountMax
+                audience.totalAmountMax,
+                jacksonObjectMapper().readValue<List<String>>(audience.rfmSegments ?: "[]")
             )
         }
         throw NotFoundException("Can't find Audience for id=$id")
     }
 
+
+    fun getClients(audienceId: String): List<Client> {
+        val findById = audiencesRepository.findById(UUID.fromString(audienceId))
+        if (findById.isPresent) {
+            val audience = findById.get()
+            return clientsRepository.customQueryByAudience(
+                jacksonObjectMapper().readValue(audience.regions ?: "[]"),
+                audience.registeredMonthsAgo ?: Int.MAX_VALUE,
+                audience.lastPaymentMonthsAgo ?: Int.MAX_VALUE,
+                audience.transactionsCountMin ?: 0,
+                audience.productsCount ?: 0,
+                audience.totalAmountMin ?:0.0,
+                audience.totalAmountMax ?: Double.MAX_VALUE,
+                jacksonObjectMapper().readValue(audience.rfmSegments ?: "[]")
+            )
+        }
+        throw NotFoundException("ololo")
+    }
 }
 
 data class AudienceCreateForm(
@@ -119,10 +113,10 @@ data class AudienceCreateForm(
     val registeredMonthsAgo: Int? = null,
     val lastPaymentMonthsAgo: Int? = null,
     val transactionsCountMin: Int? = null,
-    val transactionsCountMax: Int? = null,
     val productsCount: Int? = null,
-    val totalAmountMin: Int? = null,
-    val totalAmountMax: Int? = null
+    val totalAmountMin: Double? = null,
+    val totalAmountMax: Double? = null,
+    val rfmSegments: List<String>? = null
 )
 
 fun AudienceCreateForm.createDescription(): String {
@@ -158,8 +152,8 @@ data class AudienceFull(
     val registeredMonthsAgo: Int? = null,
     val lastPaymentMonthsAgo: Int? = null,
     val transactionsCountMin: Int? = null,
-    val transactionsCountMax: Int? = null,
     val productsCount: Int? = null,
-    val totalAmountMin: Int? = null,
-    val totalAmountMax: Int? = null
+    val totalAmountMin: Double? = null,
+    val totalAmountMax: Double? = null,
+    val rfmSegments: List<String>? = null
 )

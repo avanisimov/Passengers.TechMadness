@@ -17,10 +17,10 @@ data class Audience(
     val registeredMonthsAgo: Int? = null,
     val lastPaymentMonthsAgo: Int? = null,
     val transactionsCountMin: Int? = null,
-    val transactionsCountMax: Int? = null,
     val productsCount: Int? = null,
-    val totalAmountMin: Int? = null,
-    val totalAmountMax: Int? = null
+    val totalAmountMin: Double? = null,
+    val totalAmountMax: Double? = null,
+    val rfmSegments: String? = null
 )
 
 interface AudiencesRepository : JpaRepository<Audience, UUID>

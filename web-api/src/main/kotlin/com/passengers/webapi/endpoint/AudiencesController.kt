@@ -46,4 +46,14 @@ class AudiencesController(
             audiencesService.getAudience(id)
         )
     }
+
+    @GetMapping("clients")
+    fun getClients(
+        @RequestParam("audienceId")
+        audienceId: String
+    ):ResponseEntity<Any> {
+        return ResponseEntity.ok(
+            audiencesService.getClients(audienceId)
+        )
+    }
 }
