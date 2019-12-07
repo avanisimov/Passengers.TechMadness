@@ -53,7 +53,7 @@ class AudiencesController(
         audienceId: String
     ):ResponseEntity<Any> {
         return ResponseEntity.ok(
-            audiencesService.getClients(audienceId)
+            audiencesService.getClients(UUID.fromString(audienceId))
         )
     }
 }
