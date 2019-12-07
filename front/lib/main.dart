@@ -57,28 +57,10 @@ class AudienceListModel with ChangeNotifier {
   }
 }
 
-class AudienceListPage extends StatefulWidget {
+class AudienceListPage extends StatelessWidget {
   final Repository repository;
 
   AudienceListPage(this.repository);
-
-  @override
-  _AudienceListPageState createState() => _AudienceListPageState(repository);
-}
-
-class _AudienceListPageState extends State<AudienceListPage> {
-  List<AudienceShort> widgets = [];
-
-  final Repository repository;
-
-  _AudienceListPageState(this.repository);
-
-  @override
-  void initState() {
-    super.initState();
-
-    loadData();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,11 +72,11 @@ class _AudienceListPageState extends State<AudienceListPage> {
         body: ListView.builder(
             itemCount: model.audience.length,
             itemBuilder: (BuildContext context, int position) {
-              return getRow(model.audience[position]);
+              return getRow(context, model.audience[position]);
             }));
   }
 
-  Widget getRow(AudienceShort item) {
+  Widget getRow(BuildContext context, AudienceShort item) {
     return Card(
       child: InkWell(
         splashColor: Colors.blue.withAlpha(30),
@@ -115,14 +97,6 @@ class _AudienceListPageState extends State<AudienceListPage> {
         ),
       ),
     );
-  }
-
-  loadData() async {
-    AudienceShortListResponse listResponse = await repository.getAudiences();
-    print(listResponse);
-    setState(() {
-      widgets = listResponse.items;
-    });
   }
 }
 
