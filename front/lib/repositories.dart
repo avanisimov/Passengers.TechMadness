@@ -2,7 +2,7 @@ import 'models.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class Repository {
+class AudienceRepository {
   static String baseUrl = "http://167.71.48.207:9999/api/web";
 
   Future<AudienceShortListResponse> getAudiences() async {

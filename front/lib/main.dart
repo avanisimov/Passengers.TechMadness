@@ -6,21 +6,22 @@ import 'widgets.dart';
 import 'models.dart';
 
 void main() {
-  Repository repository = Repository();
-  runApp(SampleApp(repository));
+  AudienceRepository repository = AudienceRepository();
+  runApp(App(repository));
 }
 
-class SampleApp extends StatelessWidget {
-  final Repository repository;
+class App extends StatelessWidget {
+  final AudienceRepository repository;
 
-  SampleApp(this.repository);
+  App(this.repository);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Sample App',
         theme: ThemeData(
-          primarySwatch: Colors.red,
+          primarySwatch: Colors.blue,
+          accentColor: Colors.blueAccent
         ),
         home: ChangeNotifierProvider.value(
           value: AudienceListModel(repository),
@@ -43,11 +44,11 @@ class SampleApp extends StatelessWidget {
 class AudienceListModel with ChangeNotifier {
   List<AudienceShort> audience = [];
 
-  AudienceListModel(Repository repository) {
+  AudienceListModel(AudienceRepository repository) {
     fetchData(repository);
   }
 
-  void fetchData(Repository repository) async {
+  void fetchData(AudienceRepository repository) async {
     audience =
         await repository.getAudiences().then((response) => response.items);
     notifyListeners();
@@ -55,7 +56,7 @@ class AudienceListModel with ChangeNotifier {
 }
 
 class AudienceListPage extends StatelessWidget {
-  final Repository repository;
+  final AudienceRepository repository;
 
   AudienceListPage(this.repository);
 
@@ -98,7 +99,7 @@ class AudienceListPage extends StatelessWidget {
 }
 
 class AudienceDetailsPage extends StatelessWidget {
-  final Repository repository;
+  final AudienceRepository repository;
 
   AudienceDetailsPage(this.repository);
 
@@ -238,7 +239,7 @@ class IncomeModel with ChangeNotifier {
   int _startValue = 0;
   int _endValue = 1;
 
-  IncomeModel(Repository repository) {
+  IncomeModel(AudienceRepository repository) {
     fetchData(repository);
   }
 
@@ -286,7 +287,7 @@ class IncomeModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void fetchData(Repository repository) async {
+  void fetchData(AudienceRepository repository) async {
     _config = await repository.getLtvConfigAsync();
     _startValue = _config.minValue;
     _endValue = _config.minValue;
@@ -302,13 +303,13 @@ class RegionsModel with ChangeNotifier {
   List<String> get selectedRegions =>
       _regions.where((item) => item.isChecked).map((item) => item.title);
 
-  RegionsModel(Repository repository) {
+  RegionsModel(AudienceRepository repository) {
     fetchData(repository);
   }
 
   RegionItem getItem(int index) => _regions[index];
 
-  void fetchData(Repository repository) async {
+  void fetchData(AudienceRepository repository) async {
     _regions = await repository
         .getRegions()
         .then((list) => list.map((item) => RegionItem(item)).toList());
