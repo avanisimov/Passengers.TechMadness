@@ -12,6 +12,7 @@ import com.passengers.anroidapp.core.BaseFragment
 import com.passengers.anroidapp.core.SimpleDisposable
 import com.passengers.anroidapp.feature.news.NewsRecyclerViewAdapter
 import com.passengers.anroidapp.feature.news.NewsViewModel
+import com.passengers.anroidapp.navigation.SpecialDetailsScreen
 import com.passengers.anroidapp.network.model.FeedItem
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -58,7 +59,18 @@ class SpecialsFragment : BaseFragment() {
                                 adapter.setData(t)
                                 adapter.notifyDataSetChanged()
                             }
-                        })
+                        }),
+
+                adapter
+                        .getClickedFeedItem()
+                        .subscribeWith(object : SimpleDisposable<FeedItem>() {
+                            override fun onNext(feedItem: FeedItem) {
+                                super.onNext(feedItem)
+                                router?.navigateTo(SpecialDetailsScreen(feedItem))
+                            }
+                        }
+
+                        )
         )
     }
 

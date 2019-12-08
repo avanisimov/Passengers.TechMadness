@@ -12,9 +12,12 @@ import com.passengers.anroidapp.R
 import com.passengers.anroidapp.feature.news.NewsRecyclerViewAdapter.NewsViewHolder
 import com.passengers.anroidapp.network.model.FeedItem
 import com.passengers.anroidapp.network.model.FeedItemType
-import java.util.*
+import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 
 class NewsRecyclerViewAdapter : RecyclerView.Adapter<NewsViewHolder>() {
+
+    private val clickFeedItemSubject: PublishSubject<FeedItem> = PublishSubject.create()
 
     private var data: List<FeedItem> = ArrayList()
 
@@ -48,12 +51,19 @@ class NewsRecyclerViewAdapter : RecyclerView.Adapter<NewsViewHolder>() {
                 .load(feedItem.imageUrl)
                 .centerCrop()
                 .into(holder.photoView)
+        holder.itemView.setOnClickListener { view ->
+            clickFeedItemSubject.onNext(data[position])
+        }
 
     }
 
     override fun getItemCount(): Int {
         return data.size
     }
+
+    fun getClickedFeedItem() : Observable<FeedItem> =
+            clickFeedItemSubject.hide()
+
 
     class NewsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 

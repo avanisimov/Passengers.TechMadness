@@ -2,6 +2,7 @@ package com.passengers.anroidapp.network.model
 
 import com.google.gson.annotations.SerializedName
 import org.threeten.bp.LocalDateTime
+import java.io.Serializable
 
 data class FeedItem(
 
@@ -40,4 +41,4 @@ data class FeedItem(
 
         @SerializedName("isRead")
         var isRead: Boolean? = null
-)
+) : Serializable

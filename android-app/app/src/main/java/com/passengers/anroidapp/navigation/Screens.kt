@@ -7,6 +7,7 @@ import com.passengers.anroidapp.feature.notification.NotificationsFragment
 import com.passengers.anroidapp.feature.settings.SettingsFragment
 import com.passengers.anroidapp.feature.special.SpecialsFragment
 import com.passengers.anroidapp.feature.special_details.SpecialDetailsFragment
+import com.passengers.anroidapp.network.model.FeedItem
 import ru.terrakok.cicerone.android.support.SupportAppScreen
 
 class NewsScreen : SupportAppScreen() {
@@ -40,8 +41,9 @@ class SettingsScreen : SupportAppScreen() {
 }
 
 
-class SpecialDetailsScreen : SupportAppScreen() {
+class SpecialDetailsScreen(private val feedItem: FeedItem) : SupportAppScreen() {
+
     override fun getFragment(): Fragment {
-        return SpecialDetailsFragment()
+        return SpecialDetailsFragment.newInstance(feedItem)
     }
 }
