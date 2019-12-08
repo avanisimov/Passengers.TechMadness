@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.passengers.anroidapp.BuildConfig
 import com.passengers.anroidapp.feature.news.NewsViewModel
+import com.passengers.anroidapp.feature.special.SpecialsViewModel
 import com.passengers.anroidapp.network.api.RosbankApi
 import com.passengers.anroidapp.network.repo.news.NewsRepository
 import com.passengers.anroidapp.network.repo.news.NewsRepositoryMock
@@ -109,6 +110,9 @@ class RosbankApplication : Application() {
                 module {
                     viewModel {
                         NewsViewModel(get())
+                    }
+                    viewModel {
+                        SpecialsViewModel(get())
                     }
                 }
 

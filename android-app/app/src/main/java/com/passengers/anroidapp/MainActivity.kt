@@ -31,7 +31,7 @@ class MainActivity : BaseActivity() {
         onFindViews()
         onBindViews()
 
-        bottomNavigationView.selectedItemId = R.id.navigation_news
+        bottomNavigationView.selectedItemId = R.id.navigation_specials
 
         FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener(this) { instanceIdResult: InstanceIdResult ->
             val newToken = instanceIdResult.token
@@ -58,18 +58,18 @@ class MainActivity : BaseActivity() {
         setSupportActionBar(toolbar)
         bottomNavigationView.setOnNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.navigation_news -> router?.replaceScreen(NewsScreen()).apply {
+               /* R.id.navigation_news -> router?.replaceScreen(NewsScreen()).apply {
                     supportActionBar?.setTitle(R.string.news)
                 }
                 R.id.navigation_notifications -> router?.replaceScreen(NotificationsScreen()).apply {
                     supportActionBar?.setTitle(R.string.notifications)
-                }
+                }*/
                 R.id.navigation_specials -> router?.replaceScreen(SpecialsScreen()).apply {
                     supportActionBar?.setTitle(R.string.specials)
                 }
-                R.id.navigation_chat -> router?.replaceScreen(ChatScreen()).apply {
+              /*  R.id.navigation_chat -> router?.replaceScreen(ChatScreen()).apply {
                     supportActionBar?.setTitle(R.string.chat)
-                }
+                }*/
                 R.id.navigation_settings -> router?.replaceScreen(SettingsScreen()).apply {
                     supportActionBar?.setTitle(R.string.settings)
                 }
