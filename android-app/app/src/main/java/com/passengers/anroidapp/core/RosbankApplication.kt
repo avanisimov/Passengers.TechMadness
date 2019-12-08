@@ -1,6 +1,7 @@
 package com.passengers.anroidapp.core
 
 import android.app.Application
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.GsonBuilder
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.passengers.anroidapp.BuildConfig
@@ -45,6 +46,7 @@ class RosbankApplication : Application() {
         initCicerone()
         initDI()
         initThreeten()
+        initAnalitycs()
     }
 
     private fun initLogging() {
@@ -122,6 +124,10 @@ class RosbankApplication : Application() {
             androidContext(this@RosbankApplication)
             modules(modules)
         }
+    }
+
+    fun  initAnalitycs() {
+        FirebaseAnalytics.getInstance(this)
     }
 
     fun getNavigatorHolder(): NavigatorHolder? {

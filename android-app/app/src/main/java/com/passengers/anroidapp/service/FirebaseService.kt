@@ -8,13 +8,20 @@ import com.passengers.anroidapp.network.repo.MockCollection
 import com.passengers.anroidapp.network.repo.push.PushRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Action
+import org.koin.android.ext.android.inject
 import timber.log.Timber
 
-class FirebaseService(private val pushRepository: PushRepository) : FirebaseMessagingService() {
+class FirebaseService : FirebaseMessagingService() {
 
+    val pushRepository: PushRepository  by inject()
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
+
+        remoteMessage.data
+                .forEach { (k, v) ->
+                    Timber.i("Key %s Value %s", k, v)
+                }
     }
 
     override fun onNewToken(s: String) {

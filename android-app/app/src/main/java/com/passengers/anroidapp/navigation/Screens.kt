@@ -6,6 +6,7 @@ import com.passengers.anroidapp.feature.news.NewsFragment
 import com.passengers.anroidapp.feature.notification.NotificationsFragment
 import com.passengers.anroidapp.feature.settings.SettingsFragment
 import com.passengers.anroidapp.feature.special.SpecialsFragment
+import com.passengers.anroidapp.feature.special_details.SpecialDetailsFragment
 import ru.terrakok.cicerone.android.support.SupportAppScreen
 
 class NewsScreen : SupportAppScreen() {
@@ -35,5 +36,12 @@ class ChatScreen : SupportAppScreen() {
 class SettingsScreen : SupportAppScreen() {
     override fun getFragment(): Fragment {
         return SettingsFragment()
+    }
+}
+
+
+class SpecialDetailsScreen : SupportAppScreen() {
+    override fun getFragment(): Fragment {
+        return SpecialDetailsFragment()
     }
 }
