@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'models.dart';
 import 'repositories.dart';
 import 'widgets.dart';
+import 'widgets.dart';
 
 void main() {
   AudienceRepository repository = AudienceRepository();
@@ -76,23 +77,23 @@ class AudienceListPage extends StatelessWidget {
   }
 
   Widget getRow(BuildContext context, AudienceShort item) {
-    return Card(
-      child: InkWell(
-        splashColor: Colors.blue.withAlpha(30),
-        onTap: () {
-          Navigator.pushNamed(context, '/article-details');
-        },
-        child: Container(
-          child: Padding(
-              padding: EdgeInsets.all(16),
-              child: Column(children: [
-                Text("${item.title}",
-                    style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
-                Text(item.description,
-                    maxLines: null,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300))
-              ])),
+    return InkWell(
+      splashColor: Colors.blue.withAlpha(30),
+      onTap: () {
+        Navigator.pushNamed(context, '/article-details');
+      },
+      child: Container(
+        margin: EdgeInsets.fromLTRB(24, 4, 0, 4),
+        child: ParameterCard(
+          title: "${item.title}",
+          children: [
+            Container(
+              alignment: Alignment(-1, 0),
+              child: Text(item.description,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300)),
+            )
+          ],
         ),
       ),
     );
@@ -139,7 +140,6 @@ class AudienceDetailsPage extends StatelessWidget {
 }
 
 class IncomeRangeStateCard extends StatelessWidget {
-
   IncomeRangeStateCard();
 
   @override

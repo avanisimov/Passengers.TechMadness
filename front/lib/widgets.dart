@@ -23,6 +23,7 @@ class ParameterCard extends StatelessWidget {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
               ),
             ),
+            Divider(color: Colors.transparent, height: 4,),
             ...children,
           ],
         ),
