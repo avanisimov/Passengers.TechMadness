@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'repositories.dart';
 import 'audience_list.dart';
 import 'audience_detail.dart';
+import 'compaign_detail.dart';
 
 void main() {
   AudienceRepository repository = AudienceRepository();
@@ -38,9 +39,11 @@ class App extends StatelessWidget {
                   ChangeNotifierProvider(
                       create: (_) => TransactionCountFilterModel())
                 ],
+              ),
+          '/create-compaign': (context) => ChangeNotifierProvider.value(
+                child: EditCompaignPage(),
+                value: EditCompaignModel(),
               )
         });
   }
 }
-
-

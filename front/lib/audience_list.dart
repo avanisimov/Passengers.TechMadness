@@ -6,7 +6,6 @@ import 'widgets.dart';
 import 'routing.dart';
 
 class AudienceListPage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     AudienceListModel model = Provider.of<AudienceListModel>(context);
@@ -35,7 +34,10 @@ class AudienceListPage extends StatelessWidget {
                         style: TextStyle(color: Colors.black87),
                       ),
                       color: Colors.white70,
-                      onPressed: () { Navigator.pushNamed(context , '/article-details', arguments: AudienceArg.empty());},
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/article-details',
+                            arguments: AudienceArg.empty());
+                      },
                     ),
                     Padding(padding: EdgeInsets.all(4)),
                     MaterialButton(
@@ -44,7 +46,9 @@ class AudienceListPage extends StatelessWidget {
                         style: TextStyle(color: Colors.white),
                       ),
                       color: Colors.blue,
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/create-compaign');
+                      },
                     ),
                   ],
                 ),
