@@ -2,6 +2,7 @@ package com.passengers.webapi.service
 
 import com.passengers.webapi.data.*
 import org.springframework.stereotype.Service
+import java.time.ZonedDateTime
 import java.util.*
 
 @Service
@@ -27,7 +28,7 @@ class CampaignsService(
 
         val clients = audiencesService.getClients(audienceId = campaign.audienceId)
         val distributions = mutableListOf<Distribution>()
-        clients.forEach {client ->
+        clients.forEach { client ->
             if (campaign.pushChannel?.enabled == true) {
                 distributions.add(
                     Distribution(
@@ -35,7 +36,7 @@ class CampaignsService(
                         campaign.id,
                         client.uid,
                         ChannelType.PUSH,
-                        campaign.pushChannel.startAt
+                        Date.from(ZonedDateTime.now().plusSeconds(6).toInstant())//campaign.pushChannel.startAt
                     )
                 )
             }
