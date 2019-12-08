@@ -50,3 +50,8 @@ class RangePreset {
   RangeValues get range =>
       RangeValues(startValue.toDouble(), endValue.toDouble());
 }
+
+class MonthPeriod {
+  final int count;
+  const MonthPeriod(this.count);
+}

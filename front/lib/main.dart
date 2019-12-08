@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'models.dart';
 import 'repositories.dart';
 import 'widgets.dart';
 
 import 'models.dart';
+import 'widgets.dart';
 
 void main() {
   AudienceRepository repository = AudienceRepository();
@@ -20,9 +22,7 @@ class App extends StatelessWidget {
     return MaterialApp(
         title: 'Sample App',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
-          accentColor: Colors.blueAccent
-        ),
+            primarySwatch: Colors.blue, accentColor: Colors.blueAccent),
         home: ChangeNotifierProvider.value(
           value: AudienceListModel(repository),
           child: AudienceListPage(repository),
@@ -34,7 +34,9 @@ class App extends StatelessWidget {
                   ChangeNotifierProvider(
                       create: (_) => IncomeModel(repository)),
                   ChangeNotifierProvider(
-                      create: (_) => RegionsModel(repository))
+                      create: (_) => RegionsModel(repository)),
+                  ChangeNotifierProvider(
+                      create: (_) => RegistrationPeriodModel())
                 ],
               )
         });
@@ -113,6 +115,7 @@ class AudienceDetailsPage extends StatelessWidget {
           children: <Widget>[
             IncomeRangeStateCard(),
             RegionCard(),
+            RegistrationFilterCard(),
           ],
         ),
       ),
@@ -317,3 +320,52 @@ class RegionsModel with ChangeNotifier {
   }
 }
 
+class RegistrationFilterCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    RegistrationPeriodModel model =
+        Provider.of<RegistrationPeriodModel>(context);
+    return ParameterCard(
+      title: "Registration date",
+      children: <Widget>[
+        Row(
+          children: getChips(model),
+        )
+      ],
+    );
+  }
+
+  List<Widget> getChips(RegistrationPeriodModel model) {
+    return model.periods
+        .map((period) => Container(
+            padding: EdgeInsets.fromLTRB(0, 8, 8, 8),
+            child: ChoiceChip(
+              label: Text("${period.count} month"),
+              selected: period.selected,
+              onSelected: (selected) {
+                model.updatePeriod(period, selected);
+              },
+            )))
+        .toList();
+  }
+}
+
+class MonthPeriod {
+  final int count;
+  bool selected = false;
+  MonthPeriod(this.count);
+}
+
+class RegistrationPeriodModel with ChangeNotifier {
+  List<MonthPeriod> periods = List.unmodifiable(
+      [MonthPeriod(1), MonthPeriod(3), MonthPeriod(6), MonthPeriod(12)]);
+
+  RegistrationPeriodModel() {
+    print("RegistrationPeriodModel is created");
+  }
+
+  void updatePeriod(MonthPeriod period, bool selected) {
+    period.selected = selected;
+    notifyListeners();
+  }
+}
