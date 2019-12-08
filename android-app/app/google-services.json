@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "226579294567",
+    "firebase_url": "https://techmadness-d7c60.firebaseio.com",
+    "project_id": "techmadness-d7c60",
+    "storage_bucket": "techmadness-d7c60.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:226579294567:android:8ff24f1a40e22a66fa67c2",
+        "android_client_info": {
+          "package_name": "com.passengers.anroidapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "226579294567-6lngr5n1tpsoo88qc18p220ltqub8mqh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.passengers.anroidapp",
+            "certificate_hash": "7ee0473988d8f19f39eb6e2915e32185652d5646"
+          }
+        },
+        {
+          "client_id": "226579294567-r6q2qhbs4bnsdsbtvliklvf2n84alggf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBB9ur204Jgao63FMHqMZ4oba1iPBEwb9Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "226579294567-r6q2qhbs4bnsdsbtvliklvf2n84alggf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

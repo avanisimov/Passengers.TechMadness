@@ -1,14 +1,13 @@
 package com.passengers.anroidapp.network.api
 
-import io.reactivex.Single
+import com.passengers.anroidapp.network.model.PushToken
+import io.reactivex.Completable
 import retrofit2.http.Body
-import retrofit2.http.GET
 import retrofit2.http.POST
-import retrofit2.http.Path
 
 interface RosbankApi {
 
-    @POST("/token")
-    fun getUser(@Body any: Any?): Single<Any?>
+    @POST("token")
+    fun postToken(@Body token: PushToken): Completable
 }
 

@@ -1,37 +1,52 @@
 package com.passengers.anroidapp
 
+import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.iid.InstanceIdResult
 import com.passengers.anroidapp.core.BaseActivity
-import com.passengers.anroidapp.feature.chat.ChatViewModel
-import com.passengers.anroidapp.feature.news.NewsViewModel
-import com.passengers.anroidapp.feature.notification.NotificationsViewModel
-import com.passengers.anroidapp.feature.settings.SettingsViewModel
-import com.passengers.anroidapp.feature.special.SpecialsViewModel
 import com.passengers.anroidapp.navigation.*
+import com.passengers.anroidapp.network.model.PushToken
+import com.passengers.anroidapp.network.model.PushTokenPlatform
+import com.passengers.anroidapp.network.repo.MockCollection
+import com.passengers.anroidapp.network.repo.push.PushRepository
+import io.reactivex.android.schedulers.AndroidSchedulers
+import org.koin.android.ext.android.inject
+import timber.log.Timber
 
 
 class MainActivity : BaseActivity() {
 
     lateinit var bottomNavigationView: BottomNavigationView
     lateinit var toolbar: Toolbar
+    val pushRepository: PushRepository by inject()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-       /* var newsViewModel = ViewModelProviders.of(this)[NewsViewModel::class.java]
-        var notificationsViewModel = ViewModelProviders.of(this)[NotificationsViewModel::class.java]
-        var specialsViewModel = ViewModelProviders.of(this)[SpecialsViewModel::class.java]
-        var chatViewModel = ViewModelProviders.of(this)[ChatViewModel::class.java]
-        var settingsViewModel = ViewModelProviders.of(this)[SettingsViewModel::class.java]
-*/
         onFindViews()
         onBindViews()
 
         bottomNavigationView.selectedItemId = R.id.navigation_news
+
+        FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener(this) { instanceIdResult: InstanceIdResult ->
+            val newToken = instanceIdResult.token
+            Timber.i(" token = %s", newToken)
+
+            pushRepository
+                    .pushToken(PushToken(MockCollection.userID, newToken, PushTokenPlatform.ANDROID))
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnComplete {
+                        Timber.i("PushToken sended, token = %s", newToken)
+                    }
+                    .subscribe()
+            this.getPreferences(Context.MODE_PRIVATE).edit().putString("fb", newToken).apply()
+        }
+
     }
 
     fun onFindViews() {
