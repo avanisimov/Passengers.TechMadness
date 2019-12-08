@@ -88,8 +88,8 @@ class AudiencesService(
     }
 
 
-    fun getClients(audienceId: String): List<Client> {
-        val findById = audiencesRepository.findById(UUID.fromString(audienceId))
+    fun getClients(audienceId: UUID): List<Client> {
+        val findById = audiencesRepository.findById(audienceId)
         if (findById.isPresent) {
             val audience = findById.get()
             return clientsRepository.customQueryByAudience(

@@ -1,16 +1,27 @@
 package com.passengers.anroidapp.core
 
 import android.app.Application
+import com.google.gson.GsonBuilder
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.passengers.anroidapp.BuildConfig
-import com.passengers.anroidapp.module.AppModule
-import com.passengers.anroidapp.module.NetModule
-import com.passengers.anroidapp.module.RepoModule
+import com.passengers.anroidapp.feature.news.NewsViewModel
+import com.passengers.anroidapp.network.api.RosbankApi
+import com.passengers.anroidapp.network.repo.news.NewsRepository
+import com.passengers.anroidapp.network.repo.news.NewsRepositoryMock
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.android.ext.koin.androidContext
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.context.startKoin
+import org.koin.dsl.module
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 import ru.terrakok.cicerone.Cicerone
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.Router
 import timber.log.Timber
-import toothpick.Toothpick
+import java.util.concurrent.TimeUnit
 
 class RosbankApplication : Application() {
 
@@ -18,6 +29,7 @@ class RosbankApplication : Application() {
         lateinit var INSTANCE: RosbankApplication
         const val APP_SCOPE_KEY = "APP_SCOPE_KEY"
         const val SCOPE_KEY = "SCOPE_KEY"
+        const val TIMEOUT_DURATION = 30L
     }
 
     private var cicerone: Cicerone<Router>? = null
@@ -28,7 +40,7 @@ class RosbankApplication : Application() {
         INSTANCE = this
         initLogging()
         initCicerone()
-        initToothpick()
+        initDI()
         initThreeten()
     }
 
@@ -53,13 +65,52 @@ class RosbankApplication : Application() {
     }
 
 
-    private fun initToothpick() {
-        val openScope = Toothpick.openScope(APP_SCOPE_KEY)
-        openScope.installModules(
-                AppModule(this),
-                NetModule(),
-                RepoModule()
+    private fun initDI() {
+        val modules = listOf(
+
+                module {
+                        single { GsonBuilder().create() }
+                },
+
+                module {
+                    single {
+                        OkHttpClient.Builder()
+                                .addInterceptor(HttpLoggingInterceptor())
+                                .connectTimeout(TIMEOUT_DURATION, TimeUnit.SECONDS)
+                                .readTimeout(TIMEOUT_DURATION, TimeUnit.SECONDS)
+                                .writeTimeout(TIMEOUT_DURATION, TimeUnit.SECONDS)
+                                .build()
+                    }
+
+                    single {
+                        Retrofit.Builder()
+                                .addConverterFactory(GsonConverterFactory.create(get()))
+                                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                                .client(get())
+                                .baseUrl("http://167.71.48.207:5555/")
+                                .build()
+                                .create<RosbankApi>(RosbankApi::class.java)
+                    }
+                },
+
+                module {
+                    single<NewsRepository>{
+                        NewsRepositoryMock()
+                    }
+                },
+
+                module {
+                    viewModel {
+                        NewsViewModel(get())
+                    }
+                }
+
         )
+
+        startKoin {
+            androidContext(this@RosbankApplication)
+            modules(modules)
+        }
     }
 
     fun getNavigatorHolder(): NavigatorHolder? {

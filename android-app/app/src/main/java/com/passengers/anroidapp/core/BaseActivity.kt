@@ -7,14 +7,10 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import ru.terrakok.cicerone.Router
 import ru.terrakok.cicerone.android.support.SupportAppNavigator
-import toothpick.Toothpick
-import toothpick.config.Module
-import java.util.*
 
 abstract class BaseActivity : AppCompatActivity() {
 
     protected var router: Router? = null
-    var activityScopeKey: String? = null
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -32,20 +28,6 @@ abstract class BaseActivity : AppCompatActivity() {
 
         router = RosbankApplication.INSTANCE.getRouter()
 
-        activityScopeKey = if (savedInstanceState != null) {
-            savedInstanceState.getString(RosbankApplication.SCOPE_KEY)
-        } else {
-            this.toString()
-        }
-
-        val scope = Toothpick.openScopes(
-                RosbankApplication.APP_SCOPE_KEY,
-                activityScopeKey
-        )
-
-        scope.installModules(onCreateModule())
-
-        Toothpick.inject(this, scope)
     }
 
     override fun onResume() {
@@ -57,16 +39,10 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onPause()
         RosbankApplication.INSTANCE.getNavigatorHolder()!!.removeNavigator()
     }
-
-    open fun onCreateModule(): Module {
-        return Module()
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         if (isFinishing) {
             compositeDisposable.clear()
-            Toothpick.closeScope(activityScopeKey)
         }
     }
 }

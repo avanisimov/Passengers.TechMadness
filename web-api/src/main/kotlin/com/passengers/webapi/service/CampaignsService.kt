@@ -1,18 +1,18 @@
 package com.passengers.webapi.service
 
-import com.passengers.webapi.data.Campaign
-import com.passengers.webapi.data.CampaignsRepository
-import com.passengers.webapi.data.Channel
+import com.passengers.webapi.data.*
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
 class CampaignsService(
-    val campaignsRepository: CampaignsRepository
+    val campaignsRepository: CampaignsRepository,
+    val audiencesService: AudiencesService,
+    val distributionsRepository: DistributionsRepository
 ) {
 
     fun createCampaign(campaignCreateForm: CampaignCreateForm): Campaign {
-        return campaignsRepository.save(
+        val campaign = campaignsRepository.save(
             Campaign(
                 title = campaignCreateForm.title,
                 simpleDescription = campaignCreateForm.simpleDescription,
@@ -24,6 +24,58 @@ class CampaignsService(
                 chatChannel = campaignCreateForm.chatChannel
             )
         )
+
+        val clients = audiencesService.getClients(audienceId = campaign.audienceId)
+        val distributions = mutableListOf<Distribution>()
+        clients.forEach {client ->
+            if (campaign.pushChannel?.enabled == true) {
+                distributions.add(
+                    Distribution(
+                        UUID.randomUUID(),
+                        campaign.id,
+                        client.uid,
+                        ChannelType.PUSH,
+                        campaign.pushChannel.startAt
+                    )
+                )
+            }
+            if (campaign.pushChannel?.enabled == true) {
+                distributions.add(
+                    Distribution(
+                        UUID.randomUUID(),
+                        campaign.id,
+                        client.uid,
+                        ChannelType.SMS,
+                        campaign.pushChannel.startAt
+                    )
+                )
+            }
+            if (campaign.pushChannel?.enabled == true) {
+                distributions.add(
+                    Distribution(
+                        UUID.randomUUID(),
+                        campaign.id,
+                        client.uid,
+                        ChannelType.EMAIL,
+                        campaign.pushChannel.startAt
+                    )
+                )
+            }
+            if (campaign.pushChannel?.enabled == true) {
+                distributions.add(
+                    Distribution(
+                        UUID.randomUUID(),
+                        campaign.id,
+                        client.uid,
+                        ChannelType.CHAT,
+                        campaign.pushChannel.startAt
+                    )
+                )
+            }
+        }
+
+        distributionsRepository.saveAll(distributions)
+        return campaign
     }
 }
 
