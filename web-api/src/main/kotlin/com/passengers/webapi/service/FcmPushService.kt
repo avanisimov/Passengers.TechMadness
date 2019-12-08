@@ -47,7 +47,8 @@ class FcmPushService(
         clientIds.forEach { clientId ->
             val tokens = clientsTokenRepository.findByClientUid(clientId).map { clientsToken -> clientsToken.token!! }
             val title = campaign.title
-            val body = campaign.simpleDescription
+            val body = campaign.simpleDescription.replace("{client_name}", "User@$clientId")
+            println("FcmPushService sendDistributions $tokens $title $body")
             tokens.forEach { token ->
                 val message = Message.builder()
                     .setToken(token)
@@ -56,6 +57,7 @@ class FcmPushService(
                 FirebaseMessaging
                     .getInstance()
                     .sendAsync(message)
+
             }
         }
     }
