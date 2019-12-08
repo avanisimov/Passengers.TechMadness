@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
@@ -13,6 +14,9 @@ import springfox.documentation.builders.RequestHandlerSelectors
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.swagger2.annotations.EnableSwagger2
+import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.stereotype.Component
+
 
 @SpringBootApplication
 class WebApi {
@@ -39,6 +43,7 @@ fun main(args: Array<String>) {
 
 @Configuration
 @EnableSwagger2
+@EnableScheduling
 class SwaggerConfig {
     @Bean
     fun api(): Docket {
@@ -48,4 +53,10 @@ class SwaggerConfig {
             .paths(PathSelectors.any())
             .build()
     }
+}
+
+@ConfigurationProperties(prefix = "fcm")
+@Component
+class FcmSettings {
+    var serviceAccountFile: String? = null
 }

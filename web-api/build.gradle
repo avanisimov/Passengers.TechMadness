@@ -38,6 +38,7 @@ dependencies {
     compile 'org.postgresql:postgresql'
     compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.+"
     compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.6.0'
+    compile 'com.google.firebase:firebase-admin:6.7.0'
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }

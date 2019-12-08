@@ -1,6 +1,7 @@
 package com.passengers.webapi.data
 
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Query
 import java.util.*
 import javax.persistence.*
 
@@ -16,7 +17,10 @@ data class Distribution(
     val startAt: Date = Date()
 )
 
-interface DistributionsRepository : JpaRepository<Distribution, UUID>
+interface DistributionsRepository : JpaRepository<Distribution, UUID> {
+    @Query("SELECT d from Distribution d where startAt >= :dateStart AND startAt < :dateEnd")
+    fun findBetweenDates(dateStart: Date, dateEnd: Date): List<Distribution>
+}
 
 enum class ChannelType {
     PUSH, SMS, EMAIL, CHAT
