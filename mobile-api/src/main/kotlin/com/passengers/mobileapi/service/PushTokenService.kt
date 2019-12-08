@@ -13,7 +13,7 @@ class PushTokenService(
     fun savePushToken(userId: Long, pushToken: String, platform: PushTokenPlatform) {
         clientsTokenRepository.save(
             ClientsToken(
-                clientId = userId,
+                clientUid = userId,
                 token = pushToken,
                 platform = platform
             )
