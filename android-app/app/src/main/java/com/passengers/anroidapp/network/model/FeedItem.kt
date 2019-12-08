@@ -3,35 +3,41 @@ package com.passengers.anroidapp.network.model
 import com.google.gson.annotations.SerializedName
 import org.threeten.bp.LocalDateTime
 
-data class FeedItem (
+data class FeedItem(
 
-                @SerializedName("id")
-                var id: String,
+        @SerializedName("id")
+        var id: String,
 
-                @SerializedName("title")
-                val title: String,
+        @SerializedName("title")
+        val title: String,
 
-                @SerializedName("content")
-                var content: String,
+        @SerializedName("simpleDescription")
+        var simpleDescription: String,
 
-                @SerializedName("date")
-                val date: LocalDateTime? = null,
+        @SerializedName("fullDescription")
+        var fullDescription: String,
 
-                @SerializedName("type")
-                val type: FeedItemType? = null,
+        @SerializedName("audienceId")
+        var audienceId: String,
 
-                @SerializedName("thumbnail")
-                val imageUrl: String? = null,
+        @SerializedName("date")
+        val date: LocalDateTime? = null,
 
-                @SerializedName("callContacts")
-                val callContacts: List<String>? = null,
+        @SerializedName("type")
+        val type: FeedItemType? = null,
 
-                @SerializedName("endDate")
-                var endDate: LocalDateTime? = null,
+        @SerializedName("thumbnail")
+        val imageUrl: String? = null,
 
-                @SerializedName("author")
-                var authorName: String? = null,
+        @SerializedName("callContacts")
+        val callContacts: List<String>? = null,
 
-                @SerializedName("isRead")
-                var isRead: Boolean? = null
+        @SerializedName("endDate")
+        var endDate: LocalDateTime? = null,
+
+        @SerializedName("author")
+        var authorName: String? = null,
+
+        @SerializedName("isRead")
+        var isRead: Boolean? = null
 )
