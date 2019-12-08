@@ -4,9 +4,6 @@ import 'models.dart';
 import 'repositories.dart';
 import 'widgets.dart';
 
-import 'models.dart';
-import 'widgets.dart';
-
 void main() {
   AudienceRepository repository = AudienceRepository();
   runApp(App(repository));
@@ -36,7 +33,9 @@ class App extends StatelessWidget {
                   ChangeNotifierProvider(
                       create: (_) => RegionsModel(repository)),
                   ChangeNotifierProvider(
-                      create: (_) => RegistrationPeriodModel())
+                      create: (_) => RegistrationPeriodModel()),
+                  ChangeNotifierProvider(
+                      create: (_) => TransactionCountFilterModel())
                 ],
               )
         });
@@ -108,28 +107,44 @@ class AudienceDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Tech.Madness")),
-      body: Padding(
-        padding: EdgeInsets.all(24),
-        child: Column(
-          children: <Widget>[
-            IncomeRangeStateCard(),
-            RegionCard(),
-            RegistrationFilterCard(),
-          ],
-        ),
+      appBar: AppBar(
+        title: Text("Tech.Madness"),
+        actions: <Widget>[
+          FlatButton(
+              child: Text(
+                "Save",
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+              ),
+              onPressed: () {})
+        ],
+      ),
+      body: GridView.count(
+        childAspectRatio: 2,
+        mainAxisSpacing: 10,
+        children: <Widget>[
+          ConstrainedBox(
+            child: IncomeRangeStateCard(),
+            constraints: BoxConstraints(maxHeight: 200),
+          ),
+          RegionCard(),
+          RegistrationFilterCard(),
+          TransactionFilterCard()
+        ],
+        crossAxisCount: 3,
       ),
     );
   }
 }
 
 class IncomeRangeStateCard extends StatelessWidget {
+  GlobalKey _key = GlobalKey();
+
   IncomeRangeStateCard();
 
   @override
   Widget build(BuildContext context) {
     final config = Provider.of<IncomeModel>(context);
-    print("Income card config=${config}");
     return ParameterCard(
       title: "Income from company",
       children: <Widget>[
@@ -147,20 +162,22 @@ class IncomeRangeStateCard extends StatelessWidget {
     );
   }
 
-  Row createPresetsBar(BuildContext context, IncomeModel rangeConfig) {
+  Widget createPresetsBar(BuildContext context, IncomeModel rangeConfig) {
     double opacity = 0.1;
     List<Widget> presets = rangeConfig.rangePresets
-        .map((preset) => GestureDetector(
-            onTap: () {
-              rangeConfig.range = preset.range;
-            },
-            child: Container(
-              child: Text(preset.title),
-              padding: EdgeInsets.all(16),
-              alignment: Alignment(0.0, 0.0),
-              width: 100,
-              color: Color.fromRGBO(255, 100, 0, opacity += 0.1),
-            )))
+        .map((preset) => Expanded(
+              child: GestureDetector(
+                  onTap: () {
+                    rangeConfig.range = preset.range;
+                  },
+                  child: Container(
+                    child: Text(preset.title),
+                    padding: EdgeInsets.all(16),
+                    alignment: Alignment(0.0, 0.0),
+                    width: 100,
+                    color: Color.fromRGBO(255, 100, 0, opacity += 0.05),
+                  )),
+            ))
         .toList();
     return Row(
       children: presets,
@@ -176,8 +193,7 @@ class RegionCard extends StatelessWidget {
       title: "Regions",
       children: <Widget>[
         Divider(thickness: 1),
-        SizedBox(
-          height: 400,
+        Expanded(
           child: ListView.separated(
             shrinkWrap: true,
             itemCount: regionsModel.regions.length,
@@ -366,6 +382,54 @@ class RegistrationPeriodModel with ChangeNotifier {
 
   void updatePeriod(MonthPeriod period, bool selected) {
     period.selected = selected;
+    notifyListeners();
+  }
+}
+
+class TransactionFilterCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final model = Provider.of<TransactionCountFilterModel>(context);
+    return ParameterCard(
+      title: "Transactions amount",
+      children: <Widget>[
+        Slider(
+          onChanged: (double value) {
+            model.selectedValue = value.toInt();
+          },
+          value: model.selectedValue.toDouble(),
+          min: model.minValue.toDouble(),
+          max: model.maxValue.toDouble(),
+        ),
+        Container(
+          child: Text("Selected: ${model.selectedValue}"),
+          alignment: Alignment(1, 0),
+        )
+      ],
+    );
+  }
+}
+
+class TransactionCountFilterModel with ChangeNotifier {
+  final int maxValue;
+  final int minValue;
+  int _selectedValue = 0;
+
+  TransactionCountFilterModel({int minValue = 0, int maxValue = 1000000})
+      : this.maxValue = maxValue,
+        this.minValue = minValue,
+        this._selectedValue = minValue;
+
+  int get selectedValue => _selectedValue;
+
+  set selectedValue(int newValue) {
+    if (newValue < minValue) {
+      _selectedValue = minValue;
+    } else if (newValue > maxValue) {
+      _selectedValue = maxValue;
+    } else {
+      _selectedValue = newValue;
+    }
     notifyListeners();
   }
 }
