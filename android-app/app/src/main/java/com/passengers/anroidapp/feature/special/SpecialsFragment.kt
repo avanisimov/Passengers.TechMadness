@@ -67,6 +67,8 @@ class SpecialsFragment : BaseFragment() {
                             override fun onNext(feedItem: FeedItem) {
                                 super.onNext(feedItem)
                                 router?.navigateTo(SpecialDetailsScreen(feedItem))
+                                activity!!.actionBar?.setDisplayShowHomeEnabled(true)
+                                activity!!.actionBar?.title = "Спецпредложение"
                             }
                         }
 

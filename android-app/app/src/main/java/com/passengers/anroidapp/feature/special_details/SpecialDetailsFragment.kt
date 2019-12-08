@@ -64,7 +64,7 @@ class SpecialDetailsFragment : BaseFragment() {
         val feedItem: FeedItem = arguments?.get(ARG_ITEM) as FeedItem
 
         title.text = feedItem.title
-        description.text = feedItem.fullDescription
+        description.text = feedItem.simpleDescription
 
         Glide
                 .with(view)

@@ -126,7 +126,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:scaleType="center"
-                    app:srcCompat="@drawable/ic_24_chat" />
+                    app:srcCompat="@drawable/ic_40_call" />
 
             <TextView
                     android:layout_width="wrap_content"
@@ -148,7 +148,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:scaleType="center"
-                    app:srcCompat="@drawable/ic_24_chat" />
+                    app:srcCompat="@drawable/ic_40_callback" />
 
             <TextView
                     android:layout_width="wrap_content"
@@ -170,7 +170,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:scaleType="center"
-                    app:srcCompat="@drawable/ic_24_chat" />
+                    app:srcCompat="@drawable/ic_40_request" />
 
             <TextView
                     android:layout_width="wrap_content"
