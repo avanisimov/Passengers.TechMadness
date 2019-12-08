@@ -1,6 +1,7 @@
 package com.passengers.webapi.service
 
 import com.passengers.webapi.data.CampaignsRepository
+import com.passengers.webapi.data.ChannelType
 import com.passengers.webapi.data.ClientsRepository
 import com.passengers.webapi.data.DistributionsRepository
 import org.springframework.scheduling.annotation.Scheduled
@@ -11,18 +12,18 @@ import java.util.*
 @Service
 class DistributionsService(
     val distributionsRepository: DistributionsRepository,
-    val clientsRepository: ClientsRepository,
     val campaignsRepository: CampaignsRepository,
     val fcmPushService: FcmPushService
 ) {
     @Scheduled(fixedRate = 5000)
     fun handleDistributions() {
         val dateStart = Date()
-        val dateEnd = Date.from(ZonedDateTime.now().plusMinutes(5).toInstant())
-        val distributions = distributionsRepository.findBetweenDates(
-            dateStart, dateEnd
+        val dateEnd = Date.from(ZonedDateTime.now().plusSeconds(5).toInstant())
+        val pushDstributions = distributionsRepository.findByTypeBetweenDates(
+            ChannelType.PUSH, dateStart, dateEnd
         )
-        distributions.groupBy {
+        println("${Date()} handleDistributions $dateStart $dateEnd ${pushDstributions.size}")
+        pushDstributions.groupBy {
             it.campaignId
         }.forEach { campaignId, distributionsByCampaign ->
             val campaignOpt = campaignsRepository.findById(campaignId)

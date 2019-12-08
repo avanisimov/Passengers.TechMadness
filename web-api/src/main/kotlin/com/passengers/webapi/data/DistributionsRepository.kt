@@ -18,8 +18,12 @@ data class Distribution(
 )
 
 interface DistributionsRepository : JpaRepository<Distribution, UUID> {
-    @Query("SELECT d from Distribution d where startAt >= :dateStart AND startAt < :dateEnd")
-    fun findBetweenDates(dateStart: Date, dateEnd: Date): List<Distribution>
+    @Query("SELECT d from Distribution d where channelType= :channelType AND startAt >= :dateStart AND startAt < :dateEnd")
+    fun findByTypeBetweenDates(
+        channelType: ChannelType,
+        dateStart: Date,
+        dateEnd: Date
+    ): List<Distribution>
 }
 
 enum class ChannelType {
