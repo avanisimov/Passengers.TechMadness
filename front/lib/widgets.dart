@@ -11,7 +11,7 @@ class ParameterCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 1,
+      elevation: 0.5,
       child: Container(
         padding: EdgeInsets.all(16),
         child: Column(
@@ -27,7 +27,7 @@ class ParameterCard extends StatelessWidget {
           ],
         ),
       ),
-      margin: EdgeInsets.all(16),
+      margin: EdgeInsets.fromLTRB(0, 8, 24, 8),
     );
   }
 }

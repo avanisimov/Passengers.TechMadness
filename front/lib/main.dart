@@ -122,6 +122,7 @@ class AudienceDetailsPage extends StatelessWidget {
       body: GridView.count(
         childAspectRatio: 2,
         mainAxisSpacing: 10,
+        padding: EdgeInsets.fromLTRB(32, 8, 24, 0),
         children: <Widget>[
           ConstrainedBox(
             child: IncomeRangeStateCard(),
@@ -138,7 +139,6 @@ class AudienceDetailsPage extends StatelessWidget {
 }
 
 class IncomeRangeStateCard extends StatelessWidget {
-  GlobalKey _key = GlobalKey();
 
   IncomeRangeStateCard();
 
