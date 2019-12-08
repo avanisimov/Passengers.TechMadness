@@ -54,9 +54,3 @@ class SwaggerConfig {
             .build()
     }
 }
-
-@ConfigurationProperties(prefix = "fcm")
-@Component
-class FcmSettings {
-    var serviceAccountFile: String? = null
-}
