@@ -7,8 +7,6 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProviders
 import com.passengers.anroidapp.R
 import com.passengers.anroidapp.core.BaseFragment
-import toothpick.config.Module
-import javax.inject.Inject
 
 class NotificationsFragment : BaseFragment() {
 

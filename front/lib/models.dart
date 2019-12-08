@@ -2,6 +2,8 @@
 // Models
 //---------------------------------------------------------------------------------
 
+import 'package:flutter/material.dart';
+
 class AudienceShort {
   final String id;
   final String title;
@@ -28,4 +30,28 @@ class AudienceShortListResponse {
         (json['items'] as Iterable).map((entry) => AudienceShort.fromJson(entry)).toList();
     return new AudienceShortListResponse(json['total'], items);
   }
+}
+
+class RangeConfig {
+  final int minValue;
+  final int maxValue;
+  final List<RangePreset> presets;
+
+  RangeConfig(this.minValue, this.maxValue, this.presets);
+}
+
+class RangePreset {
+  final String title;
+  final int startValue;
+  final int endValue;
+
+  RangePreset(this.title, this.startValue, this.endValue);
+
+  RangeValues get range =>
+      RangeValues(startValue.toDouble(), endValue.toDouble());
+}
+
+class MonthPeriod {
+  final int count;
+  const MonthPeriod(this.count);
 }

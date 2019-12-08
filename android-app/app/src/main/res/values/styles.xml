@@ -13,4 +13,20 @@
         <item name="android:textColorSecondary">@color/secondaryTextColor</item>
     </style>
 
+
+    <style name="TextMedium">
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/medium</item>
+    </style>
+    <style name="TextRegular">
+        <item name="android:textStyle">normal</item>
+        <item name="android:fontFamily">@font/regular</item>
+    </style>
+    <style name="TextThin">
+        <item name="android:textStyle">normal</item>
+        <item name="android:fontFamily">@font/bold</item>
+    </style>
+
+
+
 </resources>

@@ -32,7 +32,7 @@ android {
 }
 
 dependencies {
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.core:core-ktx:1.1.0'
@@ -57,13 +57,20 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:4.2.1"
 
     // DI
-    compileOnly 'javax.inject:javax.inject:1'
-    implementation 'com.github.stephanenicolas.toothpick:toothpick-runtime:3.1.0'
-    annotationProcessor 'com.github.stephanenicolas.toothpick:toothpick-compiler:3.1.0'
+    implementation 'org.koin:koin-androidx-viewmodel:2.0.1'
 
     // Navigation
     implementation 'ru.terrakok.cicerone:cicerone:5.0.0'
 
     // Datetime
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.1'
+
+    // Image downloading
+    implementation 'com.github.bumptech.glide:glide:4.10.0'
+    implementation 'com.google.firebase:firebase-messaging:17.3.4'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
+
+
 }
+
+apply plugin: 'com.google.gms.google-services'
