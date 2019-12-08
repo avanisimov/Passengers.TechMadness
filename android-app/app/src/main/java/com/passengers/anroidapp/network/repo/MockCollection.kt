@@ -12,14 +12,14 @@ object MockCollection {
         listOf(
                 FeedItem(
                         id = "7bade105-4ae2-45e3-ac24-5293bae02ef0",
-                        title = "ЦБ предложил усложнить выдачу ипотеки закредитованным заемщикам",
+                        title = "Интернет и мобильный банк для предпринимателей",
                         content = "Регулятор намерен сократить интерес банков к выдаче ипотеки уже закредитованным клиентам и тем самым снизить риски дефолтов. Но инициатива может замедлить рост рынка и негативно повлиять на застройщиков, предупреждают эксперты\n" +
                                 "\n" +
                                 "Подробнее на РБК:\n" +
                                 "https://www.rbc.ru/finances/02/12/2019/5de546fb9a794723ae57ed28",
                         date = LocalDateTime.now().minusHours(3L),
-                        imageUrl = "https://s0.rbk.ru/v6_top_pics/resized/1180xH/media/img/7/07/755753154647077.jpeg",
-                        type = FeedItemType.NEWS
+                        imageUrl = "https://news.rambler.ru/img/2018/11/14120118.410569.6916.jpeg",
+                        type = FeedItemType.SPECIAL_DEAL
                 ),
                 FeedItem(
                         id = "7bade105-4ae2-45e3-ac24-5293bae02ef1",
