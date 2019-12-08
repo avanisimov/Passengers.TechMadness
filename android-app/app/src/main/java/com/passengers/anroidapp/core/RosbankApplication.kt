@@ -8,6 +8,8 @@ import com.passengers.anroidapp.feature.news.NewsViewModel
 import com.passengers.anroidapp.network.api.RosbankApi
 import com.passengers.anroidapp.network.repo.news.NewsRepository
 import com.passengers.anroidapp.network.repo.news.NewsRepositoryMock
+import com.passengers.anroidapp.network.repo.push.PushRepository
+import com.passengers.anroidapp.network.repo.push.PushRepositoryImpl
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
@@ -75,7 +77,9 @@ class RosbankApplication : Application() {
                 module {
                     single {
                         OkHttpClient.Builder()
-                                .addInterceptor(HttpLoggingInterceptor())
+                                .addInterceptor(HttpLoggingInterceptor().apply {
+                                    level = HttpLoggingInterceptor.Level.BODY
+                                })
                                 .connectTimeout(TIMEOUT_DURATION, TimeUnit.SECONDS)
                                 .readTimeout(TIMEOUT_DURATION, TimeUnit.SECONDS)
                                 .writeTimeout(TIMEOUT_DURATION, TimeUnit.SECONDS)
@@ -87,7 +91,7 @@ class RosbankApplication : Application() {
                                 .addConverterFactory(GsonConverterFactory.create(get()))
                                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                                 .client(get())
-                                .baseUrl("http://167.71.48.207:5555/")
+                                .baseUrl("http://167.71.48.207:5555/api/mobile/")
                                 .build()
                                 .create<RosbankApi>(RosbankApi::class.java)
                     }
@@ -96,6 +100,9 @@ class RosbankApplication : Application() {
                 module {
                     single<NewsRepository>{
                         NewsRepositoryMock()
+                    }
+                    single<PushRepository> {
+                        PushRepositoryImpl(get())
                     }
                 },
 

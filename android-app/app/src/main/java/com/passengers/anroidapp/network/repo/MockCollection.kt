@@ -34,4 +34,6 @@ object MockCollection {
                 )
         )
     }
+
+    val userID = 10498085L
 }
