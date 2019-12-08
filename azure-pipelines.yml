@@ -1,0 +1,29 @@
+# Gradle
+
+# Build your Java project and run tests with Gradle using a Gradle wrapper script.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/java
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: Gradle@2
+  inputs:
+    workingDirectory: 'mobile-api'
+    gradleWrapperFile: 'mobile-api/gradlew'
+    gradleOptions: '-Xmx3072m'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.8'
+    jdkArchitectureOption: 'x64'
+    publishJUnitResults: true
+    testResultsFiles: '**/TEST-*.xml'
+    tasks: 'build'
+- task: CmdLine@2
+  inputs:
+    script: |
+      scp build/libs/mobile-api-1.0.jar root@167.71.48.207:/var/tech-madness/mobile-api/mobile-api-1.0.jar
+      ssh root@167.71.48.207 'systemctl restart mobile-api'

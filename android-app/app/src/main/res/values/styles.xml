@@ -1,0 +1,32 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorAccent">@color/accentColor</item>
+
+        <item name="android:windowBackground">@color/windowBackgroundColor</item>
+        <item name="android:fontFamily">@font/google_sans</item>
+
+        <item name="android:textColorPrimary">@color/primaryTextColor</item>
+        <item name="android:textColorSecondary">@color/secondaryTextColor</item>
+    </style>
+
+
+    <style name="TextMedium">
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/medium</item>
+    </style>
+    <style name="TextRegular">
+        <item name="android:textStyle">normal</item>
+        <item name="android:fontFamily">@font/regular</item>
+    </style>
+    <style name="TextThin">
+        <item name="android:textStyle">normal</item>
+        <item name="android:fontFamily">@font/bold</item>
+    </style>
+
+
+
+</resources>

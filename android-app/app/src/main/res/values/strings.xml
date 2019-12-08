@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">TechMadness</string>
+    <string name="news">Новости</string>
+    <string name="notifications">Уведомления</string>
+    <string name="specials">Спецпредложения</string>
+    <string name="chat">Чат</string>
+    <string name="settings">Настройки</string>
+</resources>
