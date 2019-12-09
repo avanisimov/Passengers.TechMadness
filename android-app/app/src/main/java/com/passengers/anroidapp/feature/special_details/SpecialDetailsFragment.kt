@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.passengers.anroidapp.R
 import com.passengers.anroidapp.core.BaseFragment
+import com.passengers.anroidapp.core.RosbankApplication.Companion.ARG_ITEM
 import com.passengers.anroidapp.core.SimpleDisposable
 import com.passengers.anroidapp.feature.news.NewsViewModel
 import com.passengers.anroidapp.network.model.FeedItem
@@ -25,7 +26,6 @@ class SpecialDetailsFragment : BaseFragment() {
 
     companion object {
 
-        private val ARG_ITEM = "ARG_ITEM"
 
         fun newInstance(feedItem: FeedItem): SpecialDetailsFragment {
 

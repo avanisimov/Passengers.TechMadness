@@ -35,6 +35,7 @@ class RosbankApplication : Application() {
         const val APP_SCOPE_KEY = "APP_SCOPE_KEY"
         const val SCOPE_KEY = "SCOPE_KEY"
         const val TIMEOUT_DURATION = 30L
+        const val ARG_ITEM = "ARG_ITEM"
     }
 
     private var cicerone: Cicerone<Router>? = null
